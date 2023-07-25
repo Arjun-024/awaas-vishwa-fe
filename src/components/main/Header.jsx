@@ -15,7 +15,7 @@ const Header = () => {
         <div className="header-right">
           <div className="header-right-login">
             <Link to="/login">Login</Link>
-            <Link to="/register">register</Link>
+            <Link to="/register">Register</Link>
           </div>
         </div>
       </div>
