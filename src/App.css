@@ -46,3 +46,20 @@ header {
         display: none;
     }
 }
+
+/* 
+* FOOTER
+*/
+
+footer {
+    width: 100%;
+    height: 60px;
+    background-color: #dadada;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fooeter-text {
+    font-weight: 500;
+}
