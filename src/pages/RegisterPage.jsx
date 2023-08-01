@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const password = React.useRef()
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     
     const nameVal = name.current.value;
@@ -20,29 +20,25 @@ const RegisterPage = () => {
     const usernameVal = username.current.value;
     const passwordVal = password.current.value;
 
-    const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    const usernameFormat = /^[A-Za-z][A-Za-z0-9_]{1,29}$/
-    const passwordFormat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    if (nameVal.length < 2 || nameVal.length > 50) {
-      alert('Name must be between 2 and 50 characters', 'error')
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify({
+        name: nameVal,
+        phone: phoneVal,
+        email: emailVal,
+        username: usernameVal,
+        password: passwordVal
+      })
+    })
+    const data = await response.json()
+    if (response.ok) {
+      alert('User registered', 'success')
     }
-    if (phoneVal < 1000000000) {
-      alert('Enter a valid phone number', 'error')
-    }
-    if (!mailFormat.test(emailVal)) {
-      alert('Invalid email', 'error')
-      return
-    }
-    if (usernameVal.length < 2 || usernameVal.length > 20) {
-      alert('Username must be between 2 and 20 characters', 'error')
-    }
-    if (!usernameFormat.test(usernameVal)) {
-      alert('Invalid username! first character should be alphabet [A-Za-z] and other characters can be alphabets, numbers or an underscore so, [A-Za-z0-9_].', 'error')
-    }
-    if (!passwordFormat.test(passwordVal)) {
-      alert('password should have minimum of eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:', 'error')
-      return
+    else {
+      alert(data.error, 'error')
     }
   }
 
@@ -52,11 +48,11 @@ const RegisterPage = () => {
         <div className="register-form">
           <h1>Sign Up</h1>
           <form onSubmit={handleSubmit}>
-            <TextField fullWidth id="filled-basic" label="Full Name" variant="filled" inputRef={name} required/>
-            <TextField fullWidth id="filled-basic" label="Email" variant="filled" inputRef={email} required/>
-            <TextField fullWidth id="filled-basic" label="Phone" type='number' variant="filled" inputRef={phone} required/>
-            <TextField fullWidth id="filled-basic" label="Username" variant="filled" inputRef={username} required/>
-            <TextField fullWidth id="filled-basic" label="Password" type='password' variant="filled" inputRef={password} required/>
+            <TextField fullWidth id="filled-basic" label="Full Name" variant="filled" inputRef={name} required autoComplete='true'/>
+            <TextField fullWidth id="filled-basic" label="Email" variant="filled" inputRef={email} required autoComplete='true'/>
+            <TextField fullWidth id="filled-basic" label="Phone" type='number' variant="filled" inputRef={phone} required autoComplete='true'/>
+            <TextField fullWidth id="filled-basic" label="Username" variant="filled" inputRef={username} required autoComplete='true'/>
+            <TextField fullWidth id="filled-basic" label="Password" type='password' variant="filled" inputRef={password} required autoComplete='true'/>
             <Button sx={{marginTop: '20px', width: '100%'}} variant="contained" type='submit'>Submit</Button>
           </form>
         </div>
