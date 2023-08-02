@@ -1,9 +1,11 @@
 import React from 'react'
 import { TextField, Button } from '@mui/material';
 import alert from '../utility/alert';
+import { Navigate } from 'react-router-dom';
 
 
 const RegisterPage = () => {
+  const [redirect, setRedirect] = React.useState(false)
   const name = React.useRef()
   const phone = React.useRef()
   const email = React.useRef()
@@ -36,10 +38,15 @@ const RegisterPage = () => {
     const data = await response.json()
     if (response.ok) {
       alert('User registered', 'success')
+      setRedirect(true)
     }
     else {
       alert(data.error, 'error')
     }
+  }
+
+  if (redirect) {
+    return <Navigate to = {'/login'}/>
   }
 
   return (
